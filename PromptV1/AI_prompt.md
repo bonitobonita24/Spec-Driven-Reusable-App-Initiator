@@ -59,6 +59,14 @@ repo/
 ├─ tsconfig.base.json
 ├─ tools/
 │  └─ hydration-lint.mjs
+│  └─ tools/reset-dev.mjs
+│  └─ tools/reset-profile.mjs
+│  └─ tools/down-profile.mjs
+│  └─ tools/bootstrap-profile.mjs
+│  └─ tools/render-inputs.mjs
+│  └─ tools/validate-inputs.mjs
+│  └─ tools/sync-env.mjs
+| 
 ├─ infra/
 │  ├─ keycloak/
 │  │  └─ realm-app.json
@@ -1011,7 +1019,7 @@ FILE: apps/api/package.json
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "start": "node dist/main.js",
-    "dev": "node dist/main.js",
+    "dev": "tsx watch src/main.ts"
     "lint": "node -e \"console.log('lint placeholder')\""
   },
   "dependencies": {
@@ -1123,11 +1131,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+      - run: corepack enable
+      - run: corepack prepare pnpm@9.12.0 --activate
       - run: pnpm install --frozen-lockfile
       - run: pnpm validate:inputs
       - run: pnpm render:inputs
       - run: pnpm lint:hydration
-      - run: corepack enable
 ```
 
 FILE: README.md
